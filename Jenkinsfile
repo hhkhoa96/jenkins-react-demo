@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   tools {
-    nodejs 'NodeJS_22'              // use NodeJS installation named 'NodeJS_16' in Jenkins global config
+    nodejs 'NodeJS 22'              // use NodeJS installation named 'NodeJS_16' in Jenkins global config
   }
 
   environment {
