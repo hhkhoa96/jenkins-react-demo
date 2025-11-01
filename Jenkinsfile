@@ -1,4 +1,10 @@
 pipeline {
+  agent any
+
+  tools {
+    nodejs 'NodeJS_22'              // use NodeJS installation named 'NodeJS_16' in Jenkins global config
+  }
+
   environment {
     CI = 'true'                     // ensure react-scripts runs in CI mode
     NODE_OPTIONS = '--max_old_space_size=4096'
