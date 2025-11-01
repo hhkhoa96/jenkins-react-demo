@@ -8,6 +8,9 @@ pipeline {
   environment {
     CI = 'true'                     // ensure react-scripts runs in CI mode
     NODE_OPTIONS = '--max_old_space_size=4096'
+    AWS_REGION = 'ap-southeast-1'        // replace with your AWS region
+    S3_BUCKET = 'hhkhoa-jenkins-react-demo'  // replace with your S3 bucket name
+    AWS_CREDENTIALS = 'aws-credentials' // ID of AWS credentials in Jenkins
   }
 
   stages {
@@ -48,6 +51,18 @@ pipeline {
         archiveArtifacts artifacts: 'build/**', fingerprint: true
       }
     }
+
+    stage('Deploy to S3') {
+      steps {
+        withAWS(credentials: env.AWS_CREDENTIALS, region: env.AWS_REGION) {
+          // Sync build directory to S3 bucket
+          sh """
+            aws s3 sync build/ s3://${env.S3_BUCKET}/ --delete
+            echo "Deployed to http://${env.S3_BUCKET}.s3-website-${env.AWS_REGION}.amazonaws.com"
+          """
+        }
+      }
+    }
   }
 
   post {
@@ -57,7 +72,7 @@ pipeline {
       stash includes: '**', name: 'workspace'
     }
     failure {
-      mail to: 'dev-team@example.com', subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}", body: "See ${env.BUILD_URL}"
+      mail to: 'hhkhoa96@gmail.com', subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}", body: "See ${env.BUILD_URL}"
     }
   }
 }
