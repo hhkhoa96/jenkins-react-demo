@@ -17,6 +17,13 @@ pipeline {
       }
     }
 
+    stage('Info') {
+      steps {
+        // print node and npm versions
+        sh 'node -v && npm -v'
+      }
+    }
+
     stage('Install') {
       steps {
         sh 'npm ci'
