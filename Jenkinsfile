@@ -1,11 +1,4 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:18'
-      args '-u root:root'
-    }
-  }
-
   environment {
     CI = 'true'                     // ensure react-scripts runs in CI mode
     NODE_OPTIONS = '--max_old_space_size=4096'
